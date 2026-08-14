@@ -20,6 +20,7 @@ import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { StartDatePicker } from "@/components/start-date-picker";
 import { cn } from "@/lib/utils";
 import {
   ANALYSIS_MIN_WORDS,
@@ -36,8 +37,9 @@ const SECTIONS = [
   { id: "video", num: "03", label: "Video briefing", compact: "Video" },
 ] as const;
 
-const DOSSIER_PAD = "px-5 min-[560px]:px-7";
-const DOSSIER_BLEED = "-mx-5 min-[560px]:-mx-7";
+const DOSSIER_MAX = "max-w-[840px]";
+const DOSSIER_PAD = "px-5 min-[560px]:px-8";
+const DOSSIER_BLEED = "-mx-5 min-[560px]:-mx-8";
 const SCROLL_MT = "scroll-mt-6 min-[560px]:scroll-mt-8";
 
 const fieldLabelClass =
@@ -202,7 +204,7 @@ function InstagramIcon({ className }: { className?: string }) {
 function SubmissionThankYou() {
   return (
     <main className="flex min-h-[calc(100svh-2rem)] flex-col items-center justify-center px-5 py-10 min-[560px]:py-14">
-      <div className="w-full max-w-[400px]">
+      <div className="w-full max-w-[480px]">
         <div className="mb-7 text-center min-[560px]:mb-8">
           <Image
             src="/brand/sdot-logo.png"
@@ -308,14 +310,9 @@ function SectionNav({ activeSection }: { activeSection: string }) {
   return (
     <nav
       aria-label="Intake sections"
-      className="w-full bg-navy-deep"
+      className={cn("bg-navy-deep", DOSSIER_BLEED)}
     >
-      <ul
-        className={cn(
-          "mx-auto grid w-full max-w-[760px] grid-cols-3",
-          DOSSIER_PAD,
-        )}
-      >
+      <ul className="grid grid-cols-3">
         {SECTIONS.map((section) => {
           const isActive = activeSection === section.id;
           return (
@@ -470,20 +467,19 @@ export function InternshipIntake() {
       <div
         className={cn(
           "mx-auto w-full pb-[calc(5rem+env(safe-area-inset-bottom))]",
-          submitted ? "max-w-[420px] px-5" : cn("max-w-[760px]", DOSSIER_PAD),
+          submitted ? "max-w-[480px] px-5" : "w-full",
         )}
       >
         {submitted ? (
           <SubmissionThankYou />
         ) : (
           <>
-            <div className={cn("mx-auto w-full max-w-[760px]", DOSSIER_PAD)}>
+            <div className={cn("mx-auto w-full", DOSSIER_MAX, DOSSIER_PAD)}>
               <StampHeader />
+              <SectionNav activeSection={activeSection} />
             </div>
 
-            <SectionNav activeSection={activeSection} />
-
-            <div className={cn("mx-auto w-full max-w-[760px]", DOSSIER_PAD)}>
+            <div className={cn("mx-auto w-full", DOSSIER_MAX, DOSSIER_PAD)}>
               <main>
                 <form id="intake-form" onSubmit={onSubmit} noValidate>
                 <input
@@ -804,17 +800,11 @@ export function InternshipIntake() {
                           Earliest start date{" "}
                           <span className="text-destructive">*</span>
                         </FieldLabel>
-                        <Input
+                        <StartDatePicker
                           id="start"
-                          name="startDate"
-                          type="date"
-                          required
-                          aria-required
-                          aria-invalid={showErrors && invalid.startDate}
                           value={form.startDate}
-                          onChange={(event) =>
-                            update("startDate", event.target.value)
-                          }
+                          onChange={(value) => update("startDate", value)}
+                          invalid={showErrors && invalid.startDate}
                         />
                         {showErrors && invalid.startDate ? (
                           <FieldError>Choose a start date.</FieldError>
@@ -908,20 +898,16 @@ export function InternshipIntake() {
                   </div>
                 </section>
 
-                <div className="flex flex-col gap-3 pt-7 min-[560px]:flex-row min-[560px]:items-center min-[560px]:gap-4">
+                <div className="pt-7">
                   <Button
                     type="submit"
-                    variant="destructive"
                     size="lg"
                     disabled={filing}
-                    className="w-full font-bold tracking-wide min-[560px]:w-auto"
+                    className="h-12 w-full rounded-[3px] bg-destructive px-8 font-bold tracking-wide text-primary-foreground hover:bg-[#b0431a] disabled:bg-[#c7beb0] min-[560px]:w-auto"
                   >
                     {filing ? <Spinner data-icon="inline-start" /> : null}
                     {filing ? "Filing…" : "File Application"}
                   </Button>
-                  <p className="font-mono text-xs text-muted-foreground">
-                    Rolling review · reply by email if shortlisted
-                  </p>
                 </div>
               </form>
               </main>
