@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from "react";
 import { CircleCheckIcon } from "lucide-react";
 import { toast } from "sonner";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,7 +38,7 @@ const SECTIONS = [
 
 const DOSSIER_PAD = "px-5 min-[560px]:px-7";
 const DOSSIER_BLEED = "-mx-5 min-[560px]:-mx-7";
-const SCROLL_MT = "scroll-mt-[calc(3.25rem+env(safe-area-inset-top))] min-[560px]:scroll-mt-14";
+const SCROLL_MT = "scroll-mt-6 min-[560px]:scroll-mt-8";
 
 const fieldLabelClass =
   "w-full max-w-full flex-wrap font-mono text-[11px] font-medium leading-snug tracking-[0.06em] text-muted-foreground uppercase";
@@ -83,6 +82,50 @@ const emptyForm: FormState = {
   videoLink: "",
   videoNote: "",
 };
+
+const isDev = process.env.NODE_ENV === "development";
+
+const testPrefillForm: FormState = {
+  name: "Test Applicant",
+  email: "test.applicant@example.com",
+  phone: "+91 98765 43210",
+  city: "Hyderabad",
+  education: "Osmania University, BA Political Science, 2026",
+  portfolio: "https://example.com/portfolio",
+  interests: ["Political Analysis", "Writing"],
+  why: "SDOT sits at the intersection of politics, data, and clear public communication. I want to learn how independent political intelligence is produced, not just consumed from headlines.",
+  analysis:
+    "The recent assembly results in a large Hindi-belt state showed that media narratives about a wave often miss quieter shifts in semi-urban seats. Turnout among first-time voters rose in districts with heavy migrant returnees, while incumbents held where local delivery on irrigation and power mattered more than national slogans. The lesson for political intelligence is to track booth-level composition and local grievance alongside headline polling. Coverage that treats every election as a personality contest misses the structural story SDOT is built to explain.",
+  tools: ["Canva", "Figma"],
+  hoursPerWeek: "15",
+  startDate: "2026-09-01",
+  videoLink: "https://youtu.be/dQw4w9WgXcQ",
+  videoNote: "Intro at 0:00, political story at 0:35, why SDOT at 1:10.",
+};
+
+function DevPrefillToggle({
+  enabled,
+  onChange,
+}: {
+  enabled: boolean;
+  onChange: (enabled: boolean) => void;
+}) {
+  if (!isDev) return null;
+
+  return (
+    <div className="fixed right-4 bottom-4 z-50 max-w-[calc(100vw-2rem)]">
+      <label className="flex cursor-pointer items-center gap-2.5 border border-dashed border-primary/30 bg-card/95 px-3 py-2 font-mono text-[10px] tracking-wide text-muted-foreground uppercase shadow-sm backdrop-blur-sm min-[560px]:text-[11px]">
+        <input
+          type="checkbox"
+          checked={enabled}
+          onChange={(event) => onChange(event.target.checked)}
+          className="size-3.5 accent-primary"
+        />
+        Prefill test data
+      </label>
+    </div>
+  );
+}
 
 function wordCount(value: string) {
   const trimmed = value.trim();
@@ -137,6 +180,86 @@ function SectionHead({
   );
 }
 
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.75" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function SubmissionThankYou() {
+  return (
+    <main className="flex min-h-[calc(100svh-2rem)] flex-col items-center justify-center px-5 py-10 min-[560px]:py-14">
+      <div className="w-full max-w-[400px]">
+        <div className="mb-7 text-center min-[560px]:mb-8">
+          <Image
+            src="/brand/sdot-logo.png"
+            alt="SDOT"
+            width={560}
+            height={246}
+            priority
+            className="mx-auto h-8 w-auto min-[560px]:h-9"
+          />
+        </div>
+
+        <article className="border border-border bg-card px-5 py-7 text-center shadow-sm min-[560px]:px-7 min-[560px]:py-8">
+          <div
+            aria-hidden
+            className="mx-auto mb-4 flex size-10 items-center justify-center rounded-full bg-accent/15 text-accent"
+          >
+            <CircleCheckIcon className="size-5" strokeWidth={2.25} />
+          </div>
+
+          <h1 className="font-heading text-xl font-bold tracking-tight min-[560px]:text-[1.35rem]">
+            Thank you
+          </h1>
+          <p className="mt-3 text-[13px] leading-relaxed text-muted-foreground min-[560px]:text-sm">
+            We&apos;ve got your application. If you&apos;re shortlisted,
+            we&apos;ll reach out by email.
+          </p>
+        </article>
+
+        <section className="mt-4 border border-border bg-card/80 px-5 py-5 min-[560px]:px-6 min-[560px]:py-6">
+          <p className="font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
+            About us
+          </p>
+          <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground min-[560px]:text-sm">
+            SDOT is an independent political intelligence platform — politics,
+            data, and public communication without the noise.
+          </p>
+          <Button
+            asChild
+            size="lg"
+            className="mt-4 h-11 w-full border-0 bg-[linear-gradient(45deg,#f09433_0%,#e6683c_25%,#dc2743_50%,#cc2366_75%,#bc1888_100%)] font-mono text-[11px] tracking-[0.06em] text-white uppercase shadow-sm transition-opacity duration-200 hover:opacity-90 focus-visible:ring-[#dc2743]/40"
+          >
+            <a
+              href="https://www.instagram.com/sdot.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Follow SDOT on Instagram (opens in new tab)"
+            >
+              <InstagramIcon className="size-4" />
+              Follow on Instagram
+            </a>
+          </Button>
+        </section>
+      </div>
+    </main>
+  );
+}
+
 function StampHeader() {
   return (
     <header
@@ -185,12 +308,14 @@ function SectionNav({ activeSection }: { activeSection: string }) {
   return (
     <nav
       aria-label="Intake sections"
-      className={cn(
-        "sticky top-0 z-20 bg-navy-deep pt-[env(safe-area-inset-top)]",
-        DOSSIER_BLEED,
-      )}
+      className="w-full bg-navy-deep"
     >
-      <ul className="grid grid-cols-3">
+      <ul
+        className={cn(
+          "mx-auto grid w-full max-w-[760px] grid-cols-3",
+          DOSSIER_PAD,
+        )}
+      >
         {SECTIONS.map((section) => {
           const isActive = activeSection === section.id;
           return (
@@ -227,10 +352,16 @@ export function InternshipIntake() {
   const [form, setForm] = useState<FormState>(emptyForm);
   const [submitted, setSubmitted] = useState(false);
   const [filing, setFiling] = useState(false);
-  const [refId, setRefId] = useState("");
   const [showErrors, setShowErrors] = useState(false);
   const [activeSection, setActiveSection] = useState("profile");
   const [honeypot, setHoneypot] = useState("");
+  const [prefillEnabled, setPrefillEnabled] = useState(false);
+
+  function handlePrefillToggle(enabled: boolean) {
+    setPrefillEnabled(enabled);
+    setForm(enabled ? testPrefillForm : emptyForm);
+    setShowErrors(false);
+  }
 
   const analysisWords = wordCount(form.analysis);
   const analysisTooShort =
@@ -313,7 +444,6 @@ export function InternshipIntake() {
         return;
       }
 
-      setRefId(data.refId || "");
       setSubmitted(true);
       window.scrollTo({
         top: 0,
@@ -327,46 +457,35 @@ export function InternshipIntake() {
   }
 
   return (
-    <div className="min-h-svh overflow-x-clip bg-background">
-      <a
-        href="#intake-form"
-        className="bg-card text-foreground focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-3 focus:py-2 focus:text-sm sr-only"
-      >
-        Skip to intake form
-      </a>
+    <div className="min-h-svh bg-background">
+      {!submitted ? (
+        <a
+          href="#intake-form"
+          className="bg-card text-foreground focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-3 focus:py-2 focus:text-sm sr-only"
+        >
+          Skip to intake form
+        </a>
+      ) : null}
 
       <div
         className={cn(
-          "mx-auto w-full max-w-[760px] pb-[calc(5rem+env(safe-area-inset-bottom))]",
-          DOSSIER_PAD,
+          "mx-auto w-full pb-[calc(5rem+env(safe-area-inset-bottom))]",
+          submitted ? "max-w-[420px] px-5" : cn("max-w-[760px]", DOSSIER_PAD),
         )}
       >
-        <StampHeader />
-
         {submitted ? (
-          <main className="py-8">
-            <Alert className="border-l-accent px-5 py-6 border-l-4 min-[560px]:px-6">
-              <CircleCheckIcon />
-              <AlertTitle className="font-heading text-lg">
-                Application filed.
-              </AlertTitle>
-              <AlertDescription>
-                <p className="font-mono text-xs tracking-wider text-destructive">
-                  REF {refId}
-                </p>
-                <p>
-                  Your dossier is logged. SDOT reviews applications on a rolling
-                  basis — if shortlisted, you will hear back by email.
-                </p>
-              </AlertDescription>
-            </Alert>
-          </main>
+          <SubmissionThankYou />
         ) : (
           <>
+            <div className={cn("mx-auto w-full max-w-[760px]", DOSSIER_PAD)}>
+              <StampHeader />
+            </div>
+
             <SectionNav activeSection={activeSection} />
 
-            <main>
-              <form id="intake-form" onSubmit={onSubmit} noValidate>
+            <div className={cn("mx-auto w-full max-w-[760px]", DOSSIER_PAD)}>
+              <main>
+                <form id="intake-form" onSubmit={onSubmit} noValidate>
                 <input
                   type="text"
                   name="_hp"
@@ -805,10 +924,18 @@ export function InternshipIntake() {
                   </p>
                 </div>
               </form>
-            </main>
+              </main>
+            </div>
           </>
         )}
       </div>
+
+      {!submitted ? (
+        <DevPrefillToggle
+          enabled={prefillEnabled}
+          onChange={handlePrefillToggle}
+        />
+      ) : null}
     </div>
   );
 }

@@ -126,7 +126,7 @@
   html {
     @apply font-sans;
     scroll-behavior: smooth;
-    scroll-padding-top: calc(3.25rem + env(safe-area-inset-top));
+    scroll-padding-top: 1.5rem;
     overflow-x: clip;
   }
   body {
