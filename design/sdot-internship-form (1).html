@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SDOT — Internship Intake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#2D3480;
+    --navy-deep:#1E2359;
+    --amber:#E8822A;
+    --burnt:#C94E1E;
+    --paper:#F5F0E8;
+    --paper-dim:#EAE3D6;
+    --ink:#1E1B16;
+    --ink-soft:#6B6458;
+    --line: rgba(30,27,22,0.16);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Montserrat',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+
+  /* subtle paper texture via layered gradients */
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:0 20px 80px;
+    position:relative;
+  }
+
+  .stamp-header{
+    background:var(--navy);
+    color:var(--paper);
+    padding:38px 28px 30px;
+    margin:0 -20px 0;
+    position:relative;
+    overflow:hidden;
+  }
+  .stamp-header::after{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 2px, transparent 2px 14px);
+    pointer-events:none;
+  }
+  .eyebrow-row{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+    color:rgba(245,240,232,0.6);
+    margin-bottom:22px;
+  }
+  .seal{
+    border:1px solid rgba(232,130,42,0.7);
+    color:var(--amber);
+    padding:3px 9px;
+    border-radius:2px;
+    font-weight:600;
+  }
+  .wordmark{
+    font-weight:800;
+    font-size:15px;
+    letter-spacing:0.32em;
+    margin:0 0 6px;
+  }
+  .headline{
+    font-size:clamp(28px,6vw,38px);
+    font-weight:800;
+    line-height:1.08;
+    margin:0 0 10px;
+    letter-spacing:-0.01em;
+  }
+  .headline em{
+    font-style:normal;
+    color:var(--amber);
+  }
+  .sub{
+    font-size:14.5px;
+    color:rgba(245,240,232,0.78);
+    max-width:52ch;
+    line-height:1.55;
+    margin:0;
+  }
+
+  .tabs{
+    display:flex;
+    margin:0 -20px;
+    background:var(--navy-deep);
+  }
+  .tab{
+    flex:1;
+    padding:12px 10px;
+    text-align:center;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    color:rgba(245,240,232,0.45);
+    border-bottom:3px solid transparent;
+    transition:color .2s, border-color .2s;
+  }
+  .tab.active{ color:var(--paper); border-color:var(--amber); }
+
+  section.block{
+    padding:34px 0 8px;
+    border-bottom:1px solid var(--line);
+  }
+  section.block:last-of-type{ border-bottom:none; }
+
+  .block-head{
+    display:flex; align-items:baseline; gap:12px;
+    margin-bottom:6px;
+  }
+  .block-num{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px; font-weight:600;
+    color:var(--burnt);
+    letter-spacing:0.06em;
+  }
+  .block-title{
+    font-size:19px; font-weight:700; margin:0;
+    letter-spacing:-0.01em;
+  }
+  .block-desc{
+    font-size:13.5px; color:var(--ink-soft);
+    margin:2px 0 22px;
+    line-height:1.5;
+  }
+
+  .field{ margin-bottom:20px; }
+  .field label{
+    display:block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:7px;
+  }
+  .field label .req{ color:var(--burnt); }
+  .field input[type=text],
+  .field input[type=email],
+  .field input[type=tel],
+  .field input[type=url],
+  .field input[type=date],
+  .field input[type=number],
+  .field textarea{
+    width:100%;
+    background:#FDFBF7;
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:11px 13px;
+    font-family:'Montserrat',sans-serif;
+    font-size:14.5px;
+    color:var(--ink);
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .field textarea{ resize:vertical; min-height:88px; line-height:1.5; }
+  .field input:focus, .field textarea:focus{
+    outline:none;
+    border-color:var(--navy);
+    box-shadow:0 0 0 3px rgba(45,52,128,0.12);
+  }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media(max-width:560px){ .row2{ grid-template-columns:1fr; } }
+
+  .hint{
+    font-size:12px; color:var(--ink-soft); margin-top:6px; line-height:1.5;
+  }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:9px; }
+  .chip{
+    position:relative;
+  }
+  .chip input{ position:absolute; opacity:0; inset:0; cursor:pointer; }
+  .chip span{
+    display:inline-block;
+    padding:9px 15px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink-soft);
+    background:#FDFBF7;
+    transition:all .15s;
+  }
+  .chip input:checked + span{
+    background:var(--navy);
+    border-color:var(--navy);
+    color:var(--paper);
+  }
+
+  .video-panel{
+    background:var(--navy-deep);
+    color:var(--paper);
+    border-radius:6px;
+    padding:22px 22px 20px;
+    margin-bottom:20px;
+  }
+  .video-panel .field label{ color:rgba(245,240,232,0.55); }
+  .video-panel input[type=url]{
+    background:rgba(245,240,232,0.06);
+    border:1px solid rgba(245,240,232,0.22);
+    color:var(--paper);
+  }
+  .video-panel input[type=url]:focus{
+    border-color:var(--amber);
+    box-shadow:0 0 0 3px rgba(232,130,42,0.18);
+  }
+  .video-panel .hint{ color:rgba(245,240,232,0.55); }
+  .brief-list{
+    margin:0 0 18px; padding:0; list-style:none;
+    font-size:13px; line-height:1.7; color:rgba(245,240,232,0.85);
+  }
+  .brief-list li{ padding-left:18px; position:relative; }
+  .brief-list li::before{
+    content:"▸"; position:absolute; left:0; color:var(--amber);
+  }
+
+  .submit-row{
+    margin-top:30px;
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  }
+  button.submit{
+    background:var(--burnt);
+    color:var(--paper);
+    border:none;
+    padding:15px 30px;
+    font-family:'Montserrat',sans-serif;
+    font-weight:700;
+    font-size:14.5px;
+    letter-spacing:0.02em;
+    border-radius:3px;
+    cursor:pointer;
+    transition:background .15s, transform .1s;
+  }
+  button.submit:hover{ background:#B0431A; }
+  button.submit:active{ transform:translateY(1px); }
+  button.submit:disabled{ background:#C7BEB0; cursor:not-allowed; }
+  .status{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px; color:var(--ink-soft);
+  }
+  .status.err{ color:var(--burnt); }
+  .status.ok{ color:#2E6B3E; }
+
+  .confirm{
+    display:none;
+    margin-top:28px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-left:4px solid var(--amber);
+    border-radius:3px;
+    padding:22px 24px;
+  }
+  .confirm.show{ display:block; }
+  .confirm .ref{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:var(--burnt);
+    letter-spacing:0.06em;
+    margin-bottom:6px;
+  }
+  .confirm h3{ margin:0 0 8px; font-size:18px; }
+  .confirm p{ margin:0; font-size:13.5px; color:var(--ink-soft); line-height:1.55; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="stamp-header">
+    <div class="eyebrow-row">
+      <span>MATA LABS &nbsp;/&nbsp; SDOT</span>
+      <span class="seal">FOR APPLICANT USE</span>
+    </div>
+    <p class="wordmark">S · D · O · T</p>
+    <h1 class="headline">Internship <em>Intake</em> Dossier</h1>
+    <p class="sub">SDOT is an independent political intelligence platform. This intake collects your profile, a short assessment, and a video briefing — three sections, about 12 minutes.</p>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active">01 · PROFILE</div>
+    <div class="tab active">02 · ASSESSMENT</div>
+    <div class="tab active">03 · VIDEO BRIEFING</div>
+  </div>
+
+  <form id="intakeForm">
+
+    <section class="block">
+      <div class="block-head">
+        <span class="block-num mono">01</span>
+        <h2 class="block-title">Candidate Profile</h2>
+      </div>
+      <p class="block-desc">Basic details so we can log and route your file.</p>
+
+      <div class="row2">
+        <div class="field">
+          <label>Full name <span class="req">*</span></label>
+          <input type="text" id="f_name" required>
+        </div>
+        <div class="field">
+          <label>Email <span class="req">*</span></label>
+          <input type="email" id="f_email" required>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>Phone <span class="req">*</span></label>
+          <input type="tel" id="f_phone" required>
+        </div>
+        <div class="field">
+          <label>City</label>
+          <input type="text" id="f_city" placeholder="e.g. Hyderabad">
+        </div>
+      </div>
+      <div class="field">
+        <label>Current education / program <span class="req">*</span></label>
+        <input type="text" id="f_edu" placeholder="Institution, degree, year" required>
+      </div>
+      <div class="field">
+        <label>Portfolio, Instagram, or writing sample link</label>
+        <input type="url" id="f_portfolio" placeholder="https://">
+        <div class="hint">Anything that shows how you write, design, or think — a blog, a page, a carousel you made.</div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="block-head">
+        <span class="block-num mono">02</span>
+        <h2 class="block-title">Assessment</h2>
+      </div>
+      <p class="block-desc">Tells us where you'd fit and how you think about the work.</p>
+
+      <div class="field">
+        <label>Areas of interest <span class="req">*</span></label>
+        <div class="chips" id="interestChips">
+          <label class="chip"><input type="checkbox" value="Political Analysis"><span>Political Analysis</span></label>
+          <label class="chip"><input type="checkbox" value="Elections & Data"><span>Elections &amp; Data</span></label>
+          <label class="chip"><input type="checkbox" value="Content Design"><span>Content Design</span></label>
+          <label class="chip"><input type="checkbox" value="Video / Multimedia"><span>Video / Multimedia</span></label>
+          <label class="chip"><input type="checkbox" value="Research"><span>Research</span></label>
+          <label class="chip"><input type="checkbox" value="Writing"><span>Writing</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Why SDOT? <span class="req">*</span></label>
+        <textarea id="f_why" required placeholder="What draws you to independent political intelligence work — briefly."></textarea>
+      </div>
+
+      <div class="field">
+        <label>Short assessment — analyze a recent political development in ~100 words <span class="req">*</span></label>
+        <textarea id="f_analysis" required placeholder="Pick any recent state or national political development and give your read on it."></textarea>
+      </div>
+
+      <div class="field">
+        <label>Tools you've worked with</label>
+        <div class="chips" id="toolChips">
+          <label class="chip"><input type="checkbox" value="Canva"><span>Canva</span></label>
+          <label class="chip"><input type="checkbox" value="Figma"><span>Figma</span></label>
+          <label class="chip"><input type="checkbox" value="Adobe Suite"><span>Adobe Suite</span></label>
+          <label class="chip"><input type="checkbox" value="CapCut / Premiere"><span>CapCut / Premiere</span></label>
+          <label class="chip"><input type="checkbox" value="None yet"><span>None yet</span></label>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Availability (hours/week) <span class="req">*</span></label>
+          <input type="number" id="f_hours" min="1" max="60" required>
+        </div>
+        <div class="field">
+          <label>Earliest start date <span class="req">*</span></label>
+          <input type="date" id="f_start" required>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="block-head">
+        <span class="block-num mono">03</span>
+        <h2 class="block-title">Video Briefing</h2>
+      </div>
+      <p class="block-desc">A 60–90 second self-recorded video, hosted and linked — not uploaded here.</p>
+
+      <div class="video-panel">
+        <ul class="brief-list">
+          <li>Record 60–90 seconds: who you are, one political story you've been following, why SDOT.</li>
+          <li>Upload it to Google Drive (set to "anyone with the link") or as an unlisted YouTube / Loom video.</li>
+          <li>Paste the link below — don't attach the raw file, links only.</li>
+        </ul>
+        <div class="field">
+          <label>Video link <span class="req">*</span></label>
+          <input type="url" id="f_video" placeholder="https://drive.google.com/... or https://youtu.be/..." required>
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label>Anything else you'd like to note about the video</label>
+          <textarea id="f_videonote" placeholder="Optional — timestamp of a specific point, context, etc."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <div class="submit-row">
+      <button type="submit" class="submit" id="submitBtn">File Application</button>
+      <span class="status" id="statusMsg"></span>
+    </div>
+
+    <div class="confirm" id="confirmBox">
+      <div class="ref mono" id="confirmRef"></div>
+      <h3>Application filed.</h3>
+      <p>Your dossier is logged. SDOT reviews applications on a rolling basis — if shortlisted, you'll hear back by email.</p>
+    </div>
+
+  </form>
+</div>
+
+<script>
+const form = document.getElementById('intakeForm');
+const statusMsg = document.getElementById('statusMsg');
+const submitBtn = document.getElementById('submitBtn');
+const confirmBox = document.getElementById('confirmBox');
+const confirmRef = document.getElementById('confirmRef');
+
+function getChecked(containerId){
+  return Array.from(document.querySelectorAll('#' + containerId + ' input:checked')).map(i => i.value);
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  statusMsg.textContent = '';
+  statusMsg.className = 'status';
+
+  const interests = getChecked('interestChips');
+  if (interests.length === 0) {
+    statusMsg.textContent = 'Select at least one area of interest.';
+    statusMsg.className = 'status err';
+    return;
+  }
+
+  const data = {
+    name: document.getElementById('f_name').value.trim(),
+    email: document.getElementById('f_email').value.trim(),
+    phone: document.getElementById('f_phone').value.trim(),
+    city: document.getElementById('f_city').value.trim(),
+    education: document.getElementById('f_edu').value.trim(),
+    portfolio: document.getElementById('f_portfolio').value.trim(),
+    interests: interests,
+    why: document.getElementById('f_why').value.trim(),
+    analysis: document.getElementById('f_analysis').value.trim(),
+    tools: getChecked('toolChips'),
+    hoursPerWeek: document.getElementById('f_hours').value,
+    startDate: document.getElementById('f_start').value,
+    videoLink: document.getElementById('f_video').value.trim(),
+    videoNote: document.getElementById('f_videonote').value.trim(),
+    submittedAt: new Date().toISOString()
+  };
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Filing…';
+
+  const refId = 'SDOT-' + Date.now().toString(36).toUpperCase();
+
+  try {
+    const result = await window.storage.set('sdot-internship:' + refId, JSON.stringify(data), true);
+    if (!result) throw new Error('Storage returned no result');
+    form.style.display = 'none';
+    confirmRef.textContent = 'REF ' + refId;
+    confirmBox.classList.add('show');
+  } catch (err) {
+    statusMsg.textContent = 'Could not file the application — please try again.';
+    statusMsg.className = 'status err';
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'File Application';
+    console.error(err);
+  }
+});
+</script>
+</body>
+</html>
