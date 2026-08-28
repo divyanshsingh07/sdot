@@ -276,7 +276,15 @@ function StampHeader() {
         className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.035)_0_2px,transparent_2px_14px)]"
       />
       <div className="relative">
-        <div className="mb-5 flex items-start justify-end gap-3 font-mono text-[10px] tracking-[0.14em] text-primary-foreground/60 uppercase min-[560px]:mb-[22px] min-[560px]:items-center min-[560px]:text-[11px]">
+        <div className="mb-5 flex items-center justify-between gap-3 min-[560px]:mb-[22px]">
+          <Image
+            src="/brand/sdot-logo-header.png"
+            alt="SDOT"
+            width={560}
+            height={246}
+            priority
+            className="h-11 w-auto min-[560px]:h-14"
+          />
           <Badge
             variant="outline"
             className="h-auto shrink-0 rounded-sm border-accent/70 px-2 py-1 font-mono text-[9px] leading-none tracking-[0.14em] text-accent uppercase min-[560px]:text-[11px]"
@@ -284,14 +292,6 @@ function StampHeader() {
             For applicant use
           </Badge>
         </div>
-        <Image
-          src="/brand/sdot-logo-header.png"
-          alt="SDOT"
-          width={560}
-          height={246}
-          priority
-          className="mb-3 h-10 w-auto min-[560px]:mb-4 min-[560px]:h-12"
-        />
         <h1 className="font-heading text-[clamp(1.65rem,7vw,2.375rem)] font-extrabold leading-[1.08] tracking-tight">
           Internship <span className="text-accent">Intake</span> Dossier
         </h1>
